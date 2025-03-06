@@ -2,13 +2,11 @@
 import { Square } from "./Square";
 import { SquareValue } from "../App";
 
-interface ComponentProps {
+export function Board({ xIsNext, squares, onPlay }: {
 	xIsNext: boolean,
 	squares: SquareValue[],
 	onPlay: Function
-}
-
-export function Board({ xIsNext, squares, onPlay }: ComponentProps) {
+}) {
 	const winner = calculateWinner({ squares: squares });
 	let status: string;
 	if (winner) {
@@ -20,7 +18,7 @@ export function Board({ xIsNext, squares, onPlay }: ComponentProps) {
 	function handleClick(i: number) {
 		if (squares[i] || calculateWinner({ squares })) return;
 
-		const nextSquares = squares.slice();
+		const nextSquares: SquareValue[] = squares.slice();
 		if (xIsNext) {
 			nextSquares[i] = "X";
 		} else {
@@ -51,9 +49,9 @@ export function Board({ xIsNext, squares, onPlay }: ComponentProps) {
 	);
 }
 
-function calculateWinner({ squares }: { squares: SquareValue[] }): SquareValue|null {
-	type WinningSquares = { a: number, b: number, c: number };
-	const lines: number[][] = [
+function calculateWinner({ squares }: { squares: SquareValue[] }): SquareValue | null {
+	type WinningLine = [a: number, b: number, c: number];
+	const lines: WinningLine[] = [
 		[0, 1, 2],
 		[3, 4, 5],
 		[6, 7, 8],
@@ -65,7 +63,7 @@ function calculateWinner({ squares }: { squares: SquareValue[] }): SquareValue|n
 	];
 
 	for (let i = 0; i < lines.length; i++) {
-		const [a, b, c] = lines[i];
+		const [a, b, c]: WinningLine = lines[i];
 		if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
 			return squares[a];
 		}
